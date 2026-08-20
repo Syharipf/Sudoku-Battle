@@ -61,27 +61,27 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
   void initState() {
     super.initState();
     myPlayer = Player(name: widget.playerName, playerId: widget.isHost ? 1 : 2);
-    opponentPlayer = Player(name: "Lawan", playerId: widget.isHost ? 2 : 1);
+    opponentPlayer = Player(name: widget.isHost ? "Challenger" : "Host", playerId: widget.isHost ? 2 : 1);
     myBoard = SudokuBoard();
     opponentBoard = SudokuBoard();
 
-    _setupNetworkListeners();
+    _setupNetworking();
 
     if (widget.isHost) {
       _startHostNewRound();
     }
   }
 
-  void _setupNetworkListeners() {
+  void _setupNetworking() {
     final stream = widget.isHost ? widget.hostObj?.messageStream : widget.clientObj?.messageStream;
-    final connStream = widget.isHost ? widget.hostObj?.connectionStateStream : widget.clientObj?.connectionStateStream;
-
     _msgSub = stream?.listen(_handleIncomingMessage);
+
+    final connStream = widget.isHost ? widget.hostObj?.connectionStateStream : widget.clientObj?.connectionStateStream;
     _connSub = connStream?.listen((connected) {
       if (!connected && mounted && !isGameOver) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Koneksi lawan terputus!"), backgroundColor: Colors.redAccent),
-        );
+        setState(() {
+          battleLogs.add("⚠️ Opponent disconnected!");
+        });
       }
     });
   }
@@ -95,7 +95,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
   }
 
   void _startHostNewRound() {
-    activePatterns = getRandomPatterns(4);
+    activePatterns = getRandomPatterns(3);
     final pHost = generator.generate(difficulty: 'medium');
     final pClient = generator.generate(difficulty: 'medium');
 
@@ -119,7 +119,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
     ));
 
     setState(() {
-      battleLogs.add("⚔️ RONDE $roundNumber DIMULAI!");
+      battleLogs.add("⚔️ ROUND $roundNumber START!");
     });
   }
 
@@ -145,7 +145,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
           myTriggeredPatterns.clear();
           myPlayer.resetRoundState();
           opponentPlayer.resetRoundState();
-          battleLogs.add("⚔️ RONDE $roundNumber DIMULAI!");
+          battleLogs.add("⚔️ ROUND $roundNumber START!");
         });
         break;
 
@@ -171,7 +171,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
       case "penalty":
         setState(() {
           opponentPlayer.takePenalty();
-          battleLogs.add("❌ ${opponentPlayer.name} salah isi! Penalti -1 HP");
+          battleLogs.add("❌ ${opponentPlayer.name} made a mistake! -1 HP Penalty");
           _checkGameOver();
         });
         break;
@@ -188,7 +188,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
           if (scramble) {
             final targetCol = Random().nextInt(9);
             myBoard.scrambleColumnUserCells(targetCol);
-            battleLogs.add("🔀 Kolom ${targetCol + 1} papanmu diacak lawan!");
+            battleLogs.add("🔀 Column ${targetCol + 1} was scrambled by opponent!");
           }
           battleLogs.add(text);
           _checkGameOver();
@@ -226,19 +226,19 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
         if (!isCorrect) {
           myPlayer.takePenalty();
           _sendMessage(NetworkMessage(type: "penalty", payload: {}));
-          battleLogs.add("❌ Kamu salah isi angka! Penalti -1 HP");
+          battleLogs.add("❌ Wrong number! Penalty -1 HP");
           _checkGameOver();
           return;
         }
 
-        // Cek pola baru terbentuk
+        // Check newly formed patterns
         final matches = detector.detectNewPatterns(myBoard, activePatterns, myTriggeredPatterns);
         if (matches.isNotEmpty) {
           final results = effectEngine.applyMatches(matches, myPlayer, opponentPlayer);
           for (final res in results) {
             final key = "${res.pattern.id}_${matches.first.anchor.r}_${matches.first.anchor.c}";
             myTriggeredPatterns.add(key);
-            battleLogs.add("🔥 [Kamu] ${res.message}");
+            battleLogs.add("🔥 [You] ${res.message}");
 
             _sendMessage(NetworkMessage(
               type: "pattern_effect",
@@ -252,17 +252,17 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
           }
         }
 
-        // Cek apakah selesai ronde
+        // Check if Sudoku board completed
         if (myBoard.isComplete() && myBoard.isCorrect()) {
           opponentPlayer.takeDamage(25);
-          battleLogs.add("🏆 Kamu menyelesaikan Sudoku! +25 Damage ke lawan");
+          battleLogs.add("🏆 You solved Sudoku first! +25 Damage to opponent");
           _sendMessage(NetworkMessage(
             type: "pattern_effect",
             payload: {
               "damage": 25,
               "heal": 0,
               "scramble": false,
-              "message": "🏆 ${myPlayer.name} menyelesaikan Sudoku lebih dulu! (+25 Damage)",
+              "message": "🏆 ${myPlayer.name} solved Sudoku first! (+25 Damage)",
             },
           ));
           if (widget.isHost && myPlayer.isAlive && opponentPlayer.isAlive) {
@@ -305,7 +305,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
             backgroundColor: const Color(0xFF1E1E2F),
             title: Text(
               isDraw
-                  ? "🤝 DRAW (SERI) 🤝"
+                  ? "🤝 DRAW 🤝"
                   : isVictory
                       ? "👑 VICTORY! 👑"
                       : "💀 DEFEAT! 💀",
@@ -317,10 +317,10 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
             ),
             content: Text(
               isDraw
-                  ? "Kedua pemain gugur bersamaan pada ronde $roundNumber!"
+                  ? "Both players fell simultaneously in round $roundNumber!"
                   : isVictory
-                      ? "Selamat! Kamu berhasil mengalahkan ${opponentPlayer.name}!"
-                      : "HP kamu habis. Pemenang: ${opponentPlayer.name}!",
+                      ? "Congratulations! You defeated ${opponentPlayer.name}!"
+                      : "You ran out of HP. Winner: ${opponentPlayer.name}!",
               style: const TextStyle(color: Colors.white70),
               textAlign: TextAlign.center,
             ),
@@ -330,7 +330,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
                   Navigator.pop(ctx);
                   Navigator.pop(context);
                 },
-                child: const Text("Kembali ke Lobby"),
+                child: const Text("Back to Lobby"),
               ),
             ],
           );
@@ -352,7 +352,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
       backgroundColor: const Color(0xFF0F0F1A),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1B1B2F),
-        title: Text("PvP Battle — Ronde $roundNumber", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+        title: Text("PvP Battle — Round $roundNumber", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -394,7 +394,6 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
               isNotesMode: isNotesMode,
               hintsRemaining: 0,
             ),
-            const SizedBox(height: 6),
           ],
         ),
       ),

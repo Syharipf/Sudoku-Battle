@@ -9,7 +9,7 @@ class PatternEffect {
   const PatternEffect(this.type, this.value);
 }
 
-/// Definisi Satu Pola Serangan Sudoku Battle.
+/// Definition of a single Sudoku Battle Pattern.
 class BattlePattern {
   final String id;
   final String name;
@@ -39,22 +39,22 @@ class BattlePattern {
     for (final e in effects) {
       switch (e.type) {
         case EffectType.attack:
-          parts.add("Serang lawan -${e.value.toInt()} HP");
+          parts.add("Deal -${e.value.toInt()} HP");
           break;
         case EffectType.heal:
-          parts.add("Pulihkan +${e.value.toInt()} HP");
+          parts.add("Restore +${e.value.toInt()} HP");
           break;
         case EffectType.multiplier:
-          parts.add("Damage ×${e.value.toStringAsFixed(1)}");
+          parts.add("DMG ×${e.value.toStringAsFixed(1)}");
           break;
         case EffectType.shield:
-          parts.add("Aktifkan Shield (Blok 1 Serangan)");
+          parts.add("Activate Shield (Block 1 Attack)");
           break;
         case EffectType.ultimate:
           parts.add("ULTIMATE -${e.value.toInt()} HP");
           break;
         case EffectType.scramble:
-          parts.add("Acak Kolom Lawan + -${e.value.toInt()} HP");
+          parts.add("Scramble Opponent + -${e.value.toInt()} HP");
           break;
       }
     }
@@ -75,12 +75,12 @@ class BattlePattern {
   }
 }
 
-/// Pool 11 Pola Serangan Lengkap.
+/// Full pool of 11 Battle Patterns.
 const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "cross",
     name: "Cross (+)",
-    description: "Serang lawan -15 HP dengan bentuk plus.",
+    description: "Deal 15 DMG to opponent with a plus shape.",
     icon: "✚",
     cells: [(r: 0, c: 1), (r: 1, c: 0), (r: 1, c: 1), (r: 1, c: 2), (r: 2, c: 1)],
     effects: [PatternEffect(EffectType.attack, 15)],
@@ -88,7 +88,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "mini_heart",
     name: "Mini Heart",
-    description: "Pulihkan +10 HP dengan bentuk hati.",
+    description: "Restore +10 HP with a heart shape.",
     icon: "♥",
     cells: [(r: 0, c: 0), (r: 0, c: 2), (r: 1, c: 0), (r: 1, c: 1), (r: 1, c: 2), (r: 2, c: 1)],
     effects: [PatternEffect(EffectType.heal, 10)],
@@ -96,7 +96,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "l_shape",
     name: "L-Shape",
-    description: "Serang lawan -10 HP dengan sudut L.",
+    description: "Deal 10 DMG with an L-corner.",
     icon: "⌐",
     cells: [(r: 0, c: 0), (r: 1, c: 0), (r: 2, c: 0), (r: 2, c: 1)],
     effects: [PatternEffect(EffectType.attack, 10)],
@@ -104,7 +104,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "diagonal",
     name: "Diagonal",
-    description: "Damage multiplier ×1.5 untuk serangan berikutnya.",
+    description: "Apply ×1.5 DMG Multiplier to next attack.",
     icon: "↗",
     cells: [(r: 0, c: 0), (r: 1, c: 1), (r: 2, c: 2)],
     effects: [PatternEffect(EffectType.multiplier, 1.5)],
@@ -112,7 +112,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "box_2x2",
     name: "Box 2×2",
-    description: "Aktifkan shield pemblokir 1 serangan.",
+    description: "Activate shield to block next incoming attack.",
     icon: "🛡️",
     cells: [(r: 0, c: 0), (r: 0, c: 1), (r: 1, c: 0), (r: 1, c: 1)],
     effects: [PatternEffect(EffectType.shield, 0)],
@@ -120,7 +120,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "zigzag",
     name: "Zigzag",
-    description: "Serang lawan -12 HP dengan pola zigzag.",
+    description: "Deal 12 DMG with a lightning zigzag.",
     icon: "⚡",
     cells: [(r: 0, c: 1), (r: 1, c: 0), (r: 2, c: 1)],
     effects: [PatternEffect(EffectType.attack, 12)],
@@ -128,7 +128,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "row_streak",
     name: "Row Streak",
-    description: "Serang lawan -18 HP dengan 4 sel baris beruntun.",
+    description: "Deal 18 DMG with 4 consecutive row cells.",
     icon: "➡",
     cells: [(r: 0, c: 0), (r: 0, c: 1), (r: 0, c: 2), (r: 0, c: 3)],
     effects: [PatternEffect(EffectType.attack, 18)],
@@ -136,7 +136,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "col_streak",
     name: "Column Streak",
-    description: "Serang lawan -18 HP dengan 4 sel kolom beruntun.",
+    description: "Deal 18 DMG with 4 consecutive column cells.",
     icon: "⬇",
     cells: [(r: 0, c: 0), (r: 1, c: 0), (r: 2, c: 0), (r: 3, c: 0)],
     effects: [PatternEffect(EffectType.attack, 18)],
@@ -144,7 +144,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "t_shape",
     name: "T-Shape",
-    description: "Serang -12 HP & pulihkan +5 HP.",
+    description: "Deal 12 DMG & restore +5 HP.",
     icon: "🗡️",
     cells: [(r: 0, c: 0), (r: 0, c: 1), (r: 0, c: 2), (r: 1, c: 1)],
     effects: [PatternEffect(EffectType.attack, 12), PatternEffect(EffectType.heal, 5)],
@@ -152,7 +152,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "x_wing",
     name: "X-Wing",
-    description: "Serang lawan -20 HP dengan 4 sudut persegi 3x3.",
+    description: "Deal 20 Heavy DMG with 4 corner cells.",
     icon: "✖",
     cells: [(r: 0, c: 0), (r: 0, c: 2), (r: 2, c: 0), (r: 2, c: 2)],
     effects: [PatternEffect(EffectType.attack, 20)],
@@ -160,7 +160,7 @@ const List<BattlePattern> patternPool = [
   BattlePattern(
     id: "column_scramble",
     name: "Column Chaos",
-    description: "Acak kolom lawan + serang -7 HP.",
+    description: "Scramble opponent column & deal 7 DMG.",
     icon: "🔀",
     cells: [(r: 0, c: 0), (r: 1, c: 0), (r: 2, c: 0)],
     effects: [PatternEffect(EffectType.scramble, 7)],

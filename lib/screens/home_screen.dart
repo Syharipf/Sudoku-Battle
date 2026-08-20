@@ -50,8 +50,8 @@ class HomeScreen extends StatelessWidget {
                   // Menu Buttons
                   _buildMenuCard(
                     context,
-                    title: "SOLO MODE",
-                    subtitle: "Bermain santai / latihan dengan sistem HP",
+                    title: "SOLO PRACTICE",
+                    subtitle: "Play solo & train with the 100 HP battle system",
                     icon: Icons.play_arrow_rounded,
                     color: Colors.cyanAccent,
                     onTap: () => _showDifficultyDialog(context),
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                   _buildMenuCard(
                     context,
                     title: "PVP OFFLINE (HOTSPOT / LAN)",
-                    subtitle: "Tantang teman via Wi-Fi Hotspot tanpa internet",
+                    subtitle: "Challenge nearby friends via Hotspot without internet",
                     icon: Icons.wifi_tethering,
                     color: Colors.redAccent,
                     onTap: () {
@@ -73,8 +73,8 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   _buildMenuCard(
                     context,
-                    title: "PANDUAN & POLA SERANGAN",
-                    subtitle: "Pelajari 11 pola serangan & efek battle",
+                    title: "BATTLE PATTERNS GUIDE",
+                    subtitle: "Learn all 11 battle patterns & special effects",
                     icon: Icons.menu_book_rounded,
                     color: Colors.amberAccent,
                     onTap: () {
@@ -166,7 +166,7 @@ class HomeScreen extends StatelessWidget {
       builder: (ctx) {
         return AlertDialog(
           backgroundColor: const Color(0xFF1E1E2F),
-          title: const Text("Pilih Tingkat Kesulitan", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: const Text("Select Difficulty", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

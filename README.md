@@ -1,38 +1,38 @@
 # 📱 Sudoku Battle: Android Mobile Edition (Offline LAN / Hotspot)
 
-Game Sudoku kompetitif berbasis mobile Android yang dapat dimainkan **100% offline** (tanpa kuota internet) baik **Solo** maupun **Multiplayer PvP** melalui koneksi **Portable Wi-Fi Hotspot / LAN** antar-HP!
+A competitive mobile Sudoku game for Android that can be played **100% offline** (no internet connection required) both in **Solo Practice** and **Multiplayer PvP** mode via **Portable Wi-Fi Hotspot / LAN**!
 
 ---
 
-## ⚡ Download APK & Main di HP
+## ⚡ Download APK & Play on Mobile
 
-Setiap kali ada update code atau commit ke branch `main`, **GitHub Actions CI/CD** akan otomatis mem-build file APK Android (`app-release.apk`).
+Every update or commit to the `main` branch automatically triggers **GitHub Actions CI/CD** to build the Android release APK (`app-release.apk`).
 
-1. Buka tab **Releases** atau tab **Actions** di GitHub repository ini.
-2. Download file **`app-release.apk`**.
-3. Install file APK di HP Android (izinkan *Install from unknown sources* / *Instal aplikasi tidak dikenal* jika diminta).
-4. Selesai! Game siap dimainkan.
-
----
-
-## ✨ Fitur Utama Mobile
-
-- **📱 Touch-Optimized UI:** Navigasi tap sel responsif, grid 9×9 proporsional, serta Virtual Numpad (1–9, Erase, Notes, Hint).
-- **⚔️ Real-Time PvP via Hotspot:** HP 1 membuka Portable Hotspot & Room, HP 2 terhubung ke Wi-Fi dan langsung join via IP lokal (`192.168.43.1:7777`).
-- **❤️ Sistem HP 100 & Penalti:** Salah mengisi angka = **-1 HP**. HP habis = Kalah!
-- **🎯 11 Pola Serangan (Battle Patterns):**
-  - **✚ Cross:** Serang -15 HP
-  - **♥ Mini Heart:** Heal +10 HP
-  - **🔀 Column Chaos (Scramble):** Acak kolom papan lawan + Damage -7 HP
-  - **🛡️ Box 2×2:** Shield pemblokir 1 serangan
-  - **↗ Diagonal:** Damage Multiplier ×1.5
-  - **⚡ Zigzag, ➡ Row Streak, ⬇ Col Streak, 🗡️ T-Shape, ✖ X-Wing**
-- **💡 Dynamic Hint Column:** Kolom acak menyala kuning setiap ~30 detik untuk hint gratis.
-- **👀 Opponent Mini-Grid:** Pemain dapat melihat live progress papan lawan di pojok layar.
+1. Open the **Releases** tab or **Actions** tab on this GitHub repository.
+2. Download **`app-release.apk`**.
+3. Install the APK on your Android device (enable *Install unknown apps* if prompted).
+4. Enjoy! The game is ready to play.
 
 ---
 
-## 📁 Struktur Proyek (Flutter / Dart)
+## ✨ Key Features
+
+- **📱 Touch-Optimized UI & Ergonomic Numpad:** Responsive 9×9 grid navigation, comfortable two-row virtual numpad with large touch targets (1–9, Erase, Notes, Hint).
+- **⚔️ Real-Time PvP via Hotspot:** Player 1 opens Portable Hotspot & hosts room, Player 2 connects to Wi-Fi and joins via local IP (`192.168.43.1:7777`).
+- **❤️ 100 HP & Penalty System:** Wrong cell input = **-1 HP Penalty**. Reach 0 HP = Defeat!
+- **🎯 11 Battle Patterns:**
+  - **✚ Cross:** Deal -15 HP damage
+  - **♥ Mini Heart:** Restore +10 HP
+  - **🔀 Column Chaos (Scramble):** Scramble opponent board column + Deal -7 HP
+  - **🛡️ Box 2×2:** Shield to block 1 incoming attack
+  - **↗ Diagonal:** ×1.5 Damage Multiplier on next attack
+  - **⚡ Zigzag, ➡ Row Streak, ⬇ Column Streak, 🗡️ T-Shape, ✖ X-Wing**
+- **💡 Dynamic Hint Column:** A random column glows yellow every ~30 seconds for bonus free hints.
+- **👀 Opponent Mini-Grid:** Real-time mini-preview of the opponent's puzzle progress in the corner.
+
+---
+
+## 📁 Project Structure (Flutter / Dart)
 
 ```
 Sudoku Battle/
@@ -52,41 +52,41 @@ Sudoku Battle/
 └── lib/
     ├── main.dart
     ├── core/
-    │   ├── board.dart          # Logika papan 9x9, Hint Column, Column Scramble
-    │   ├── generator.dart      # Generator puzzle solusi unik
-    │   ├── validator.dart      # Validasi aturan baris, kolom, 3x3 box
-    │   └── solver.dart         # MCV hint algorithm & bonus column hints
+    │   ├── board.dart          # 9x9 board logic, Hint Column, Column Scramble
+    │   ├── generator.dart      # Unique puzzle generator
+    │   ├── validator.dart      # Sudoku row, column, 3x3 box validator
+    │   └── solver.dart         # MCV hint algorithm & column bonus hints
     ├── battle/
-    │   ├── player.dart         # Model HP, Shield, Multiplier, Penalti
-    │   ├── patterns.dart       # Pool 11 pola serangan & definisi efek
-    │   ├── detector.dart       # Detektor bentuk pola dari user-filled cells
-    │   └── effects.dart        # Engine pengaplikasian damage, heal, scramble
+    │   ├── player.dart         # HP, Shield, Multiplier, Penalty model
+    │   ├── patterns.dart       # Pool of 11 battle patterns & effect definitions
+    │   ├── detector.dart       # Pattern detector from player-filled cells
+    │   └── effects.dart        # Engine for damage, heal, shield, and scramble
     ├── network/
-    │   ├── network_message.dart# Format JSON protocol
-    │   ├── game_host.dart      # Server socket lokal di HP Host (Port 7777)
-    │   └── game_client.dart    # Socket client di HP Challenger
+    │   ├── network_message.dart# JSON network protocol
+    │   ├── game_host.dart      # Local socket server on Host device (Port 7777)
+    │   └── game_client.dart    # Socket client on Challenger device
     ├── screens/
-    │   ├── home_screen.dart    # Menu utama
-    │   ├── solo_game_screen.dart# Mode solo touch
-    │   ├── pvp_lobby_screen.dart# Host / Join LAN Hotspot
-    │   ├── pvp_game_screen.dart # Layar pertarungan PvP split-preview
-    │   └── patterns_guide_screen.dart # Panduan 11 pola
+    │   ├── home_screen.dart    # Main menu
+    │   ├── solo_game_screen.dart# Solo practice mode
+    │   ├── pvp_lobby_screen.dart# Host / Join LAN lobby
+    │   ├── pvp_game_screen.dart # Real-time PvP arena with mini-preview
+    │   └── patterns_guide_screen.dart # 11 patterns visual guide
     └── widgets/
-        ├── sudoku_grid.dart    # Grid 9x9 interaktif
-        ├── mini_opponent_grid.dart # Mini-preview papan lawan
-        ├── virtual_numpad.dart # Keypad virtual
-        ├── hp_bar_widget.dart  # Bar HP animasi & status shield/buff
-        ├── pattern_banner_widget.dart # Daftar pola aktif
-        └── battle_log_widget.dart # Log serangan real-time
+        ├── sudoku_grid.dart    # Interactive 9x9 board
+        ├── mini_opponent_grid.dart # Opponent live mini-preview
+        ├── virtual_numpad.dart # Ergonomic 2-row virtual keypad
+        ├── hp_bar_widget.dart  # Animated HP bar & shield/buff badges
+        ├── pattern_banner_widget.dart # Active patterns horizontal list
+        └── battle_log_widget.dart # Real-time combat log
 ```
 
 ---
 
-## 🌐 Cara Bermain Multiplayer Tanpa Internet (Offline Hotspot)
+## 🌐 How to Play Multiplayer Offline (No Internet Required)
 
-1. **HP 1 (Host):** Nyalakan **Hotspot Portabel / Tethering** di pengaturan Android.
-2. **HP 2 (Client):** Sambungkan Wi-Fi ke Hotspot HP 1.
-3. Buka game **Sudoku Battle** di kedua HP.
-4. **HP 1:** Pilih `PVP OFFLINE` → Tap **Buat Room (Host)**.
-5. **HP 2:** Pilih `PVP OFFLINE` → Masukkan IP Host (biasanya `192.168.43.1`) → Tap **Gabung ke Host**.
-6. Pertarungan Sudoku real-time langsung dimulai!
+1. **Phone 1 (Host):** Turn on **Portable Hotspot / Tethering** in Android Settings.
+2. **Phone 2 (Client):** Connect Wi-Fi to Phone 1's Hotspot.
+3. Open **Sudoku Battle** on both phones.
+4. **Phone 1:** Select `PVP OFFLINE` → Tap **CREATE ROOM (HOST)**.
+5. **Phone 2:** Select `PVP OFFLINE` → Enter Host IP (usually `192.168.43.1`) → Tap **JOIN ROOM (CLIENT)**.
+6. The real-time Sudoku battle begins immediately!

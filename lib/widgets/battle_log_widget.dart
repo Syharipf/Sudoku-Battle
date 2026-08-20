@@ -21,7 +21,7 @@ class BattleLogWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: recentLogs.isEmpty
-            ? [const Text("Menunggu aksi battle...", style: TextStyle(color: Colors.white30, fontSize: 11, fontStyle: FontStyle.italic))]
+            ? [const Text("Waiting for battle actions...", style: TextStyle(color: Colors.white30, fontSize: 11, fontStyle: FontStyle.italic))]
             : recentLogs.map((log) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 1.5),

@@ -3,7 +3,7 @@ import '../network/game_host.dart';
 import '../network/game_client.dart';
 import 'pvp_game_screen.dart';
 
-/// Layar Lobby Pemilihan Host / Join Room via Wi-Fi Hotspot / LAN.
+/// PvP Lobby Screen for LAN / Hotspot Host & Join.
 class PvPLobbyScreen extends StatefulWidget {
   const PvPLobbyScreen({super.key});
 
@@ -77,7 +77,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.redAccent,
-            content: Text("Gagal terhubung ke host! Pastikan kedua HP di Hotspot yang sama."),
+            content: Text("Failed to connect to host! Ensure both devices are on the same Wi-Fi / Hotspot."),
           ),
         );
       }
@@ -101,7 +101,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
               controller: _nameController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                labelText: "Nama Kamu",
+                labelText: "Your Nickname",
                 labelStyle: const TextStyle(color: Colors.cyanAccent),
                 prefixIcon: const Icon(Icons.person, color: Colors.cyanAccent),
                 filled: true,
@@ -127,14 +127,14 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                         Icon(Icons.wifi_tethering, color: Colors.redAccent, size: 28),
                         SizedBox(width: 12),
                         Text(
-                          "BUAT ROOM (HOST)",
+                          "CREATE ROOM (HOST)",
                           style: TextStyle(color: Colors.redAccent, fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      "HP 1 menyalakan Portable Hotspot, lalu buka room di sini.",
+                      "Phone 1 turns on Portable Hotspot, then starts hosting here.",
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                     const SizedBox(height: 16),
@@ -142,7 +142,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                       const CircularProgressIndicator(color: Colors.redAccent),
                       const SizedBox(height: 12),
                       Text(
-                        "Menunggu Lawan...\nAlamat IP: $hostAddress",
+                        "Waiting for Opponent...\nHost IP: $hostAddress",
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.amberAccent, fontWeight: FontWeight.bold),
                       ),
@@ -155,7 +155,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                             hostAddress = null;
                           });
                         },
-                        child: const Text("Batal"),
+                        child: const Text("Cancel"),
                       ),
                     ] else
                       ElevatedButton.icon(
@@ -166,7 +166,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                         ),
                         icon: const Icon(Icons.play_arrow),
-                        label: const Text("Mulai Host Server"),
+                        label: const Text("Start Host Server"),
                       ),
                   ],
                 ),
@@ -191,14 +191,14 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                         Icon(Icons.link, color: Colors.cyanAccent, size: 28),
                         SizedBox(width: 12),
                         Text(
-                          "GABUNG ROOM (CLIENT)",
+                          "JOIN ROOM (CLIENT)",
                           style: TextStyle(color: Colors.cyanAccent, fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      "HP 2 sambungkan Wi-Fi ke Hotspot HP 1, masukkan IP Host, lalu tap Gabung.",
+                      "Phone 2 connects Wi-Fi to Phone 1's Hotspot, enter Host IP, then tap Join.",
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                     const SizedBox(height: 16),
@@ -206,7 +206,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                       controller: _ipController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: "IP Host (Default Hotspot: 192.168.43.1)",
+                        labelText: "Host IP (Hotspot Default: 192.168.43.1)",
                         labelStyle: const TextStyle(color: Colors.white70),
                         prefixIcon: const Icon(Icons.router, color: Colors.cyanAccent),
                         filled: true,
@@ -226,7 +226,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                         ),
                         icon: const Icon(Icons.login),
-                        label: const Text("Gabung ke Host", style: TextStyle(fontWeight: FontWeight.bold)),
+                        label: const Text("Join Host Room", style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                   ],
                 ),

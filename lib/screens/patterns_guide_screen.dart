@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../battle/patterns.dart';
 
-/// Panduan Visual & Penjelasan Seluruh 11 Pola Serangan.
+/// Visual Guide and description of all 11 Battle Patterns.
 class PatternsGuideScreen extends StatelessWidget {
   const PatternsGuideScreen({super.key});
 
@@ -11,7 +11,7 @@ class PatternsGuideScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF0F0F1A),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1B1B2F),
-        title: const Text("PANDUAN 11 POLA SERANGAN", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        title: const Text("BATTLE PATTERNS GUIDE", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
@@ -66,7 +66,7 @@ class PatternsGuideScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            "⚡ Efek: ${p.effectDescription}",
+                            "⚡ Effect: ${p.effectDescription}",
                             style: const TextStyle(color: Colors.amberAccent, fontSize: 11, fontWeight: FontWeight.bold),
                           ),
                         ),

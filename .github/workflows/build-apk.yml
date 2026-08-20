@@ -58,11 +58,11 @@ jobs:
             ### 🎮 Sudoku Battle APK Build
             Auto-generated build from commit `${{ github.sha }}`.
 
-            **Cara Install di HP Android:**
-            1. Download file `app-release.apk` di bawah.
-            2. Buka file di HP Android Anda.
-            3. Izinkan *Install unknown apps* jika diminta.
-            4. Mainkan bersama teman di jaringan WiFi / Hotspot yang sama!
+            **Installation Instructions:**
+            1. Download `app-release.apk` below.
+            2. Open the file on your Android device.
+            3. Allow *Install unknown apps* if prompted.
+            4. Challenge your friends over the same Wi-Fi / Hotspot!
           prerelease: true
           files: build/app/outputs/flutter-apk/app-release.apk
         env:

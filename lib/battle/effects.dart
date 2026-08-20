@@ -126,30 +126,30 @@ class EffectEngine {
   String _buildMessage(BattlePattern pattern, Map<String, dynamic> data) {
     final parts = <String>[];
     if (data['blocked'] == true) {
-      parts.add("serangan diblokir Shield lawan!");
+      parts.add("attack blocked by opponent's Shield!");
     } else if ((data['damage'] as int) > 0) {
-      parts.add("lawan -${data['damage']} HP");
+      parts.add("opponent -${data['damage']} HP");
     }
 
     if (data['scramble'] == true && data['blocked'] != true) {
-      parts.add("kolom papan lawan diacak! 🔀");
+      parts.add("opponent's column scrambled! 🔀");
     }
 
     if ((data['heal'] as int) > 0) {
-      parts.add("pulihkan +${data['heal']} HP");
+      parts.add("restored +${data['heal']} HP");
     }
 
     if ((data['multiplier'] as double) > 1.0) {
-      parts.add("multiplier ×${(data['multiplier'] as double).toStringAsFixed(1)} aktif");
+      parts.add("multiplier ×${(data['multiplier'] as double).toStringAsFixed(1)} active");
     }
 
     if (data['shield'] == true) {
-      parts.add("Shield diaktifkan 🛡️");
+      parts.add("Shield activated 🛡️");
     }
 
     if (parts.isNotEmpty) {
       return "${pattern.icon} [${pattern.name}] ${parts.join(', ')}";
     }
-    return "${pattern.icon} [${pattern.name}] terpicu!";
+    return "${pattern.icon} [${pattern.name}] triggered!";
   }
 }

@@ -31,13 +31,13 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
   int secondsElapsed = 0;
   Timer? gameTimer;
   Timer? hintColumnTimer;
-  String statusMessage = "Selamat bermain! Pilih sel & masukkan angka.";
+  String statusMessage = "Welcome! Select a cell & enter a number.";
 
   @override
   void initState() {
     super.initState();
     board = SudokuBoard();
-    player = Player(name: "Pemain", playerId: 1);
+    player = Player(name: "Player", playerId: 1);
     _startNewGame();
   }
 
@@ -67,10 +67,10 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
         if (chosenCol != null) {
           setState(() {
             board.hintColumn = chosenCol;
-            statusMessage = "💡 BONUS: Kolom ${chosenCol + 1} aktif sebagai Hint Column! (Tekan Hint)";
+            statusMessage = "💡 BONUS: Column ${chosenCol + 1} active as Hint Column! (Tap Hint)";
           });
 
-          // Hilang setelah 15 detik
+          // Disappears after 15 seconds
           Future.delayed(const Duration(seconds: 15), () {
             if (mounted) {
               setState(() => board.hintColumn = null);
@@ -113,10 +113,10 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
         final isCorrect = board.setValue(r, c, num);
         if (!isCorrect) {
           player.takePenalty();
-          statusMessage = "❌ Angka $num salah! Penalti -1 HP (Sisa HP: ${player.hp})";
+          statusMessage = "❌ Number $num is wrong! -1 HP Penalty (Remaining HP: ${player.hp})";
           if (!player.isAlive) _showGameOverDialog(false);
         } else {
-          statusMessage = "✅ Angka $num tepat!";
+          statusMessage = "✅ Number $num placed correctly!";
           if (board.isComplete() && board.isCorrect()) {
             _showGameOverDialog(true);
           }
@@ -132,7 +132,7 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
     if (!board.cells[r][c].isGiven) {
       setState(() {
         board.clearCell(r, c);
-        statusMessage = "Sel dikosongkan.";
+        statusMessage = "Cell cleared.";
       });
     }
   }
@@ -140,7 +140,7 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
   void _onHint() {
     if (!player.isAlive) return;
 
-    // Cek apakah Hint Column aktif
+    // Check if Hint Column is active
     if (board.hintColumn != null) {
       final col = board.hintColumn!;
       final hints = solver.getHintsForColumn(board, col);
@@ -149,7 +149,7 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
         setState(() {
           board.setValue(h.r, h.c, h.val);
           selectedCell = (r: h.r, c: h.c);
-          statusMessage = "💡 [Bonus Hint Column] Sel (${h.r + 1}, ${h.c + 1}) diisi angka ${h.val}!";
+          statusMessage = "💡 [Bonus Hint Column] Cell (${h.r + 1}, ${h.c + 1}) filled with ${h.val}!";
           if (board.isComplete() && board.isCorrect()) _showGameOverDialog(true);
         });
         return;
@@ -158,7 +158,7 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
 
     if (hintsUsed >= maxHints) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Kuota hint standar sudah habis (maks 3)!"), duration: Duration(seconds: 1)),
+        const SnackBar(content: Text("Standard hint limit reached (max 3)!"), duration: Duration(seconds: 1)),
       );
       return;
     }
@@ -173,7 +173,7 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
           selectedCell = (r: hintPos.r, c: hintPos.c);
           hintsUsed++;
           player.stats.hintsUsed++;
-          statusMessage = "💡 [Hint $hintsUsed/$maxHints] Sel (${hintPos.r + 1}, ${hintPos.c + 1}) diisi angka $val.";
+          statusMessage = "💡 [Hint $hintsUsed/$maxHints] Cell (${hintPos.r + 1}, ${hintPos.c + 1}) filled with $val.";
           if (board.isComplete() && board.isCorrect()) _showGameOverDialog(true);
         });
       }
@@ -201,15 +201,15 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
             children: [
               Text(
                 isVictory
-                    ? "Selamat! Kamu berhasil menyelesaikan puzzle ${widget.difficulty.toUpperCase()}!"
-                    : "HP kamu telah habis akibat penalti kesalahan mengisi sel.",
+                    ? "Awesome! You solved the ${widget.difficulty.toUpperCase()} puzzle!"
+                    : "You ran out of HP from cell input penalties.",
                 style: const TextStyle(color: Colors.white70),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              Text("⏱️ Waktu: ${_formatTime(secondsElapsed)}", style: const TextStyle(color: Colors.white)),
-              Text("❤️ Sisa HP: ${player.hp}/${Player.maxHp}", style: const TextStyle(color: Colors.white)),
-              Text("❌ Kesalahan: ${player.stats.penaltyCount}", style: const TextStyle(color: Colors.white)),
+              Text("⏱️ Time: ${_formatTime(secondsElapsed)}", style: const TextStyle(color: Colors.white)),
+              Text("❤️ Remaining HP: ${player.hp}/${Player.maxHp}", style: const TextStyle(color: Colors.white)),
+              Text("❌ Mistakes: ${player.stats.penaltyCount}", style: const TextStyle(color: Colors.white)),
             ],
           ),
           actions: [
@@ -218,14 +218,14 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
                 Navigator.pop(ctx);
                 Navigator.pop(context);
               },
-              child: const Text("Menu Utama"),
+              child: const Text("Main Menu"),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(ctx);
                 setState(() => _startNewGame());
               },
-              child: const Text("Main Lagi"),
+              child: const Text("Play Again"),
             ),
           ],
         );
@@ -292,7 +292,6 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
               isNotesMode: isNotesMode,
               hintsRemaining: maxHints - hintsUsed,
             ),
-            const SizedBox(height: 8),
           ],
         ),
       ),
