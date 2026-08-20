@@ -1,0 +1,27 @@
+name: sudoku_battle
+description: "Sudoku Battle: Android Mobile Edition (Offline LAN / Hotspot)"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_animate: ^4.5.0
+  google_fonts: ^6.1.0
+  network_info_plus: ^5.0.1
+  shared_preferences: ^2.2.2
+  vibration: ^2.0.0
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^5.1.1
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
