@@ -4,6 +4,17 @@ Game Sudoku kompetitif berbasis mobile Android yang dapat dimainkan **100% offli
 
 ---
 
+## ⚡ Download APK & Main di HP
+
+Setiap kali ada update code atau commit ke branch `main`, **GitHub Actions CI/CD** akan otomatis mem-build file APK Android (`app-release.apk`).
+
+1. Buka tab **Releases** atau tab **Actions** di GitHub repository ini.
+2. Download file **`app-release.apk`**.
+3. Install file APK di HP Android (izinkan *Install from unknown sources* / *Instal aplikasi tidak dikenal* jika diminta).
+4. Selesai! Game siap dimainkan.
+
+---
+
 ## ✨ Fitur Utama Mobile
 
 - **📱 Touch-Optimized UI:** Navigasi tap sel responsif, grid 9×9 proporsional, serta Virtual Numpad (1–9, Erase, Notes, Hint).
@@ -24,10 +35,20 @@ Game Sudoku kompetitif berbasis mobile Android yang dapat dimainkan **100% offli
 ## 📁 Struktur Proyek (Flutter / Dart)
 
 ```
-sudoku_mobile/
+Sudoku Battle/
+├── .github/
+│   └── workflows/
+│       └── build-apk.yml       # GitHub Actions CI/CD pipeline (Auto Build APK & Release)
 ├── pubspec.yaml
 ├── android/
-│   └── app/src/main/AndroidManifest.xml
+│   ├── build.gradle
+│   ├── settings.gradle
+│   ├── gradle.properties
+│   └── app/
+│       ├── build.gradle
+│       └── src/main/
+│           ├── AndroidManifest.xml
+│           └── kotlin/com/example/sudoku_battle/MainActivity.kt
 └── lib/
     ├── main.dart
     ├── core/
@@ -57,26 +78,6 @@ sudoku_mobile/
         ├── hp_bar_widget.dart  # Bar HP animasi & status shield/buff
         ├── pattern_banner_widget.dart # Daftar pola aktif
         └── battle_log_widget.dart # Log serangan real-time
-```
-
----
-
-## 🚀 Cara Menjalankan / Build ke Android
-
-Pastikan kamu memiliki **Flutter SDK**:
-
-```bash
-# Masuk ke folder mobile
-cd sudoku_mobile
-
-# Ambil dependencies
-flutter pub get
-
-# Jalankan di emulator / HP Android yang terhubung via USB
-flutter run
-
-# Atau build APK Release offline
-flutter build apk --release
 ```
 
 ---
