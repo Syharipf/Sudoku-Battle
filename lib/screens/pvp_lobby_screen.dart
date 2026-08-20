@@ -17,6 +17,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
 
   bool isHosting = false;
   bool isConnecting = false;
+  bool _navigatedToGame = false;
   String? hostAddress;
   GameHost? host;
   GameClient? client;
@@ -25,8 +26,11 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
   void dispose() {
     _nameController.dispose();
     _ipController.dispose();
-    host?.stop();
-    client?.disconnect();
+    // Only stop networking if user cancelled/exited the lobby without starting a game
+    if (!_navigatedToGame) {
+      host?.stop();
+      client?.disconnect();
+    }
     super.dispose();
   }
 
@@ -34,10 +38,12 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
     setState(() => isHosting = true);
     host = GameHost();
     final ip = await host!.startHost();
+    if (!mounted) return;
     setState(() => hostAddress = "$ip:7777");
 
     host!.connectionStateStream.listen((connected) {
-      if (connected && mounted) {
+      if (connected && mounted && !_navigatedToGame) {
+        _navigatedToGame = true;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -61,6 +67,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
     final success = await client!.connect(ip);
 
     if (success && mounted) {
+      _navigatedToGame = true;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -77,7 +84,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.redAccent,
-            content: Text("Failed to connect to host! Ensure both devices are on the same Wi-Fi / Hotspot."),
+            content: Text("Failed to connect! Ensure both devices are on the same Wi-Fi / Hotspot and the IP is correct."),
           ),
         );
       }
@@ -134,7 +141,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      "Phone 1 turns on Portable Hotspot, then starts hosting here.",
+                      "Option A: Turn on Portable Hotspot\nOption B: Both phones connect to the same Wi-Fi router",
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                     const SizedBox(height: 16),
@@ -198,7 +205,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      "Phone 2 connects Wi-Fi to Phone 1's Hotspot, enter Host IP, then tap Join.",
+                      "Enter the Host IP shown on Player 1's screen, then tap Join.",
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                     const SizedBox(height: 16),
@@ -206,7 +213,7 @@ class _PvPLobbyScreenState extends State<PvPLobbyScreen> {
                       controller: _ipController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: "Host IP (Hotspot Default: 192.168.43.1)",
+                        labelText: "Host IP (e.g. 192.168.43.1 or 192.168.1.X)",
                         labelStyle: const TextStyle(color: Colors.white70),
                         prefixIcon: const Icon(Icons.router, color: Colors.cyanAccent),
                         filled: true,

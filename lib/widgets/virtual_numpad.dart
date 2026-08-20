@@ -8,6 +8,7 @@ class VirtualNumpad extends StatelessWidget {
   final VoidCallback onToggleNotes;
   final bool isNotesMode;
   final int hintsRemaining;
+  final Set<int> completedNumbers;
 
   const VirtualNumpad({
     super.key,
@@ -17,6 +18,7 @@ class VirtualNumpad extends StatelessWidget {
     required this.onToggleNotes,
     this.isNotesMode = false,
     this.hintsRemaining = 3,
+    this.completedNumbers = const {},
   });
 
   @override
@@ -144,6 +146,29 @@ class VirtualNumpad extends StatelessWidget {
   }
 
   Widget _buildNumberKey(int number) {
+    final isCompleted = completedNumbers.contains(number);
+
+    if (isCompleted) {
+      // Completed Number: Hidden / Dimmed out with checkmark indicator
+      return Expanded(
+        child: Container(
+          height: 52,
+          margin: const EdgeInsets.symmetric(horizontal: 3),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.02),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white.withOpacity(0.04)),
+          ),
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.check_circle_outline,
+            size: 16,
+            color: Colors.greenAccent.withOpacity(0.3),
+          ),
+        ),
+      );
+    }
+
     return Expanded(
       child: Container(
         height: 52,

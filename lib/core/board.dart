@@ -170,5 +170,24 @@ class SudokuBoard {
     );
   }
 
+  /// Returns set of numbers (1-9) that are fully and correctly placed on the board (9 of 9).
+  Set<int> getCompletedNumbers() {
+    final completed = <int>{};
+    for (int num = 1; num <= size; num++) {
+      int count = 0;
+      for (int r = 0; r < size; r++) {
+        for (int c = 0; c < size; c++) {
+          if (cells[r][c].value == num && cells[r][c].isValid) {
+            count++;
+          }
+        }
+      }
+      if (count >= size) {
+        completed.add(num);
+      }
+    }
+    return completed;
+  }
+
   List<List<int>>? get solution => _solution;
 }

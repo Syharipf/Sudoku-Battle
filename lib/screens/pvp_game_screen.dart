@@ -343,6 +343,8 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
   void dispose() {
     _msgSub?.cancel();
     _connSub?.cancel();
+    widget.hostObj?.stop();
+    widget.clientObj?.disconnect();
     super.dispose();
   }
 
@@ -393,6 +395,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
               onToggleNotes: () => setState(() => isNotesMode = !isNotesMode),
               isNotesMode: isNotesMode,
               hintsRemaining: 0,
+              completedNumbers: myBoard.getCompletedNumbers(),
             ),
           ],
         ),

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'network_message.dart';
 
-/// Game Client di HP Player 2 yang terhubung ke IP Host via Hotspot.
+/// Game Client on Challenger device connecting to Host IP via LAN/Hotspot.
 class GameClient {
   Socket? _socket;
   bool isConnected = false;
@@ -14,10 +14,15 @@ class GameClient {
   Stream<NetworkMessage> get messageStream => _messageController.stream;
   Stream<bool> get connectionStateStream => _connectionStateController.stream;
 
-  /// Hubungkan ke IP Host (Port 7777).
+  /// Connect to Host IP (Port 7777).
   Future<bool> connect(String hostIp, {int port = 7777, Duration timeout = const Duration(seconds: 8)}) async {
     try {
-      _socket = await Socket.connect(hostIp, port, timeout: timeout);
+      disconnect(); // Clean up previous connection if any
+      _socket = await Socket.connect(hostIp.trim(), port, timeout: timeout);
+      try {
+        _socket!.setOption(SocketOption.tcpNoDelay, true);
+      } catch (_) {}
+
       isConnected = true;
       _connectionStateController.add(true);
 
@@ -32,6 +37,7 @@ class GameClient {
         },
         onDone: () => _handleDisconnected(),
         onError: (_) => _handleDisconnected(),
+        cancelOnError: false,
       );
 
       return true;
@@ -43,7 +49,11 @@ class GameClient {
 
   void send(NetworkMessage message) {
     if (_socket != null && isConnected) {
-      _socket!.writeln(message.encode());
+      try {
+        _socket!.writeln(message.encode());
+      } catch (_) {
+        _handleDisconnected();
+      }
     }
   }
 

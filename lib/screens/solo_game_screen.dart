@@ -291,6 +291,7 @@ class _SoloGameScreenState extends State<SoloGameScreen> {
               onToggleNotes: () => setState(() => isNotesMode = !isNotesMode),
               isNotesMode: isNotesMode,
               hintsRemaining: maxHints - hintsUsed,
+              completedNumbers: board.getCompletedNumbers(),
             ),
           ],
         ),
