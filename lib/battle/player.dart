@@ -21,7 +21,7 @@ class Player {
   static const int maxHp = 100;
   static const int penaltyDamage = 1;
 
-  final String name;
+  String name;
   final int playerId;
   int hp;
   PlayerStatus status;

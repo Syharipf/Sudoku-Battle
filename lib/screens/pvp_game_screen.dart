@@ -265,7 +265,7 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
               "message": "🏆 ${myPlayer.name} menyelesaikan Sudoku lebih dulu! (+25 Damage)",
             },
           ));
-          if (widget.isHost && myPlayer.isAlive && opponentPlayer.isAlive()) {
+          if (widget.isHost && myPlayer.isAlive && opponentPlayer.isAlive) {
             roundNumber++;
             _startHostNewRound();
           }
@@ -292,10 +292,10 @@ class _PvPGameScreenState extends State<PvPGameScreen> {
   }
 
   void _checkGameOver() {
-    if (!myPlayer.isAlive || !opponentPlayer.isAlive()) {
+    if (!myPlayer.isAlive || !opponentPlayer.isAlive) {
       isGameOver = true;
-      final isVictory = myPlayer.isAlive && !opponentPlayer.isAlive();
-      final isDraw = !myPlayer.isAlive && !opponentPlayer.isAlive();
+      final isVictory = myPlayer.isAlive && !opponentPlayer.isAlive;
+      final isDraw = !myPlayer.isAlive && !opponentPlayer.isAlive;
 
       showDialog(
         context: context,
